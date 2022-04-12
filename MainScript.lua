@@ -15,7 +15,19 @@ local tab3 = Window:AddTab('Player')
 local tab4 = Window:AddTab('Teleports')
 local tab5 = Window:AddTab('Misc')
 tab:AddButton("Copy Discord Link", function()
-    local N1 = NotifLib.new("success", "Copied to clipboard", "Copied DISCORDLINK to clipboard.")
+    setclipboard("discord.gg/QzgbdcXYaP")
+    local N1 = NotifLib.new("success", "Copied to clipboard", "Copied discord.gg/QzgbdcXYaP to clipboard.")
     N1:deleteTimeout(3)
-    
+
+end)
+
+
+
+
+
+
+tab5:AddButton("Destroy GUI", function()
+
+game:GetService("CoreGui").imgui:Destroy
+
 end)
