@@ -15,9 +15,41 @@ local tab5 = Window:AddTab('Misc')
 
 _G.TweenSpeed = 3
 _G.AutoFarm = false
+_G.BasicFarm = false
 _G.deleted = false
+_G.deleted2 = false
 
 -- funcs
+
+function TweenToCFrame(TweenSpeed, CFrameToGo)
+    if not game.Players.LocalPlayer.Character.Humanoid then return end
+    local tween =  game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new(TweenSpeed), {CFrame = CFrameToGo})
+    tween:Play()
+    tween.Completed:Wait()
+end
+
+function BasicFarmRun()
+    if _G.BasicFarm == true then
+        wait()
+        game.Players.LocalPlayer.Character.WaterDetector:Destroy()
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 1369.09009, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --  
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 2139.09009, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --  
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 2909.09009, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --  
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 3679.09009, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --  
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 4449.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) -- 
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 5219.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --  
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 5989.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) -- 
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 6759.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 7529.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-51.5656433, 100.0000458, 8299.08984, 1, 0, 0, 0, 1, 0, 0, 0, 1)) --
+        TweenToCFrame(_G.TweenSpeed, CFrame.new(-55.7065125, -358.739624, 9492.35645, 0, 0, -1, 0, 1, 0, 1, 0, 0))--
+        wait(1)
+    else
+        if _G.BasicFarm == false then
+           _G.BasicFarm = false
+        end
+    end
+end
 
 function Run_Farm()
     local client = game.Players.LocalPlayer
@@ -80,7 +112,7 @@ end)
 
 --tab 2
 
-tab2:AddSwitch("Fast Autofarm", function(bool)
+tab2:AddSwitch("TP Autofarm", function(bool)
     _G.AutoFarm = bool
     spawn(function()
         repeat
@@ -89,6 +121,23 @@ tab2:AddSwitch("Fast Autofarm", function(bool)
         until _G.AutoFarm == false
     end)
 end)
+
+tab2:AddSwitch("Basic Autofarm (slightly buggy)", function(bool)
+    _G.BasicFarm = bool
+    spawn(function()
+        repeat
+            BasicFarmRun()
+            wait(17)
+        until _G.BasicFarm == false
+    end)
+end)
+
+local slider = tab2:AddSlider("TweenSpeed (only works on Basic Farm)", function(p)
+	_G.TweenSpeed = p
+    end,{
+	["min"] = 20,
+	["max"] = 1,
+})	slider:Set(85)
 
 tab2:AddLabel("WARNING: Let Autofarm run to the end after disabling!")
 
@@ -123,6 +172,22 @@ end)
 
 tab5:AddButton("Remove water damage (reset to disable)", function()
     game.Players.LocalPlayer.Character.WaterDetector:Destroy()
+end)
+
+tab5:AddButton("Remove object damage (rejoin to disable", function()
+    if _G.deleted2 ~= true then
+        for i,v in pairs(game.Workspace.BoatStages:GetDescendants()) do
+            if v.Name == "RockScript" then
+                v.Parent:Destroy()
+            end
+        end
+        local notifN4 = NotifLib.new("Success", "Succesfully removed object damage", 'Removed most damageable objects (must rejoin to undo)')
+        notifN4:deleteTimeout(3.5)
+        _G.deleted2 = true
+    else
+        local notifN5 = NotifLib.new("error", "Failed to remove stages", "Failed to remove damage objects")
+        notifN5:deleteTimeout(3.5)
+    end
 end)
 
 tab5:AddButton("Remove stages (rejoin to disable)", function()
